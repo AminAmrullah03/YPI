@@ -4,8 +4,13 @@ namespace App\Exports;
 
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use Maatwebsite\Excel\Concerns\WithCustomValueBinder;
+use PhpOffice\PhpSpreadsheet\Cell\Cell;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
+use PhpOffice\PhpSpreadsheet\Cell\DefaultValueBinder;
 
-class GuruTemplateExport implements FromArray, WithHeadings
+class GuruTemplateExport extends DefaultValueBinder implements FromArray, WithHeadings, WithColumnFormatting, WithCustomValueBinder
 {
     public function headings(): array
     {
@@ -63,5 +68,25 @@ class GuruTemplateExport implements FromArray, WithHeadings
                 'aktif',
             ]
         ];
+    }
+
+    public function columnFormats(): array
+    {
+        return [
+            'A' => '@', // NIK
+            'B' => '@', // NUPTK
+            'H' => '@', // Telepon
+        ];
+    }
+
+    public function bindValue(Cell $cell, $value)
+    {
+        // Paksa numeric string (seperti NIK, NUPTK, Telepon) sebagai String agar tidak berubah format di Excel
+        if (is_numeric($value)) {
+            $cell->setValueExplicit($value, DataType::TYPE_STRING);
+            return true;
+        }
+
+        return parent::bindValue($cell, $value);
     }
 }

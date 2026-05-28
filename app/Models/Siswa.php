@@ -21,6 +21,11 @@ class Siswa extends Model
         'pindah'      => 'Pindah',
     ];
 
+    const PROGRAM_LIST = [
+        'fullday'  => 'Fullday',
+        'fulltime' => 'Fulltime',
+    ];
+
     const JENIS_KELAMIN = [
         'L' => 'Laki-laki',
         'P' => 'Perempuan',
@@ -41,6 +46,7 @@ class Siswa extends Model
         'telepon_wali',
         'tanggal_masuk',
         'kelas',
+        'program',
         'status',
         'foto',
         'created_by',
@@ -76,6 +82,11 @@ class Siswa extends Model
     public function getJenisKelaminLabelAttribute(): string
     {
         return self::JENIS_KELAMIN[$this->jenis_kelamin] ?? $this->jenis_kelamin;
+    }
+
+    public function getProgramLabelAttribute(): string
+    {
+        return self::PROGRAM_LIST[$this->program] ?? $this->program;
     }
 
     public function getFotoUrlAttribute(): string

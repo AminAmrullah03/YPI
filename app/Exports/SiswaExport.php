@@ -6,8 +6,13 @@ use App\Models\Siswa;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use Maatwebsite\Excel\Concerns\WithCustomValueBinder;
+use PhpOffice\PhpSpreadsheet\Cell\Cell;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
+use PhpOffice\PhpSpreadsheet\Cell\DefaultValueBinder;
 
-class SiswaExport implements FromCollection, WithHeadings, WithMapping
+class SiswaExport extends DefaultValueBinder implements FromCollection, WithHeadings, WithMapping, WithColumnFormatting, WithCustomValueBinder
 {
     protected $lembagaId;
     protected $status;
@@ -49,6 +54,7 @@ class SiswaExport implements FromCollection, WithHeadings, WithMapping
             'Telepon Wali',
             'Tanggal Masuk',
             'Kelas',
+            'Program',
             'Status',
         ];
     }
@@ -72,7 +78,28 @@ class SiswaExport implements FromCollection, WithHeadings, WithMapping
             $siswa->telepon_wali ?? '—',
             $siswa->tanggal_masuk?->format('d/m/Y') ?? '—',
             $siswa->kelas ?? '—',
+            $siswa->program_label,
             $siswa->status_label,
         ];
+    }
+
+    public function columnFormats(): array
+    {
+        return [
+            'C' => '@', // NIS
+            'D' => '@', // NIK
+            'K' => '@', // Telepon Wali
+        ];
+    }
+
+    public function bindValue(Cell $cell, $value)
+    {
+        // Hindari konversi ke number/notasi ilmiah untuk NIS, NIK, dan No Telepon
+        if (is_numeric($value) && strlen($value) > 4) {
+            $cell->setValueExplicit($value, DataType::TYPE_STRING);
+            return true;
+        }
+
+        return parent::bindValue($cell, $value);
     }
 }

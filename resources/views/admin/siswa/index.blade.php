@@ -53,6 +53,7 @@
                     <th style="padding:14px 16px;">Nama Siswa</th>
                     <th style="padding:14px 16px;">NIS / NIK</th>
                     <th style="padding:14px 16px;">Kelas</th>
+                    <th style="padding:14px 16px;">Program</th>
                     <th style="padding:14px 16px;">JK</th>
                     <th style="padding:14px 16px;">Orang Tua / Wali</th>
                     <th style="padding:14px 16px; text-align:center; width:140px;">Status</th>
@@ -62,7 +63,7 @@
             <tbody>
                 @if($siswaList->isEmpty())
                     <tr>
-                        <td colspan="8" style="padding:40px; text-align:center; color:#94a3b8;">
+                        <td colspan="9" style="padding:40px; text-align:center; color:#94a3b8;">
                             <i class="ph ph-student" style="font-size:40px; display:block; margin-bottom:8px;"></i>
                             Data siswa belum diinput.
                         </td>
@@ -89,6 +90,9 @@
                         </td>
                         <td style="padding:12px 16px; font-size:13.5px; font-weight:600; color:#1e293b;">
                             {{ $sis->kelas ?? '—' }}
+                        </td>
+                        <td style="padding:12px 16px; font-size:13px; font-weight:700; color:#10b981;">
+                            {{ $sis->program_label }}
                         </td>
                         <td style="padding:12px 16px; font-size:13px; color:#475569; font-weight:500;">
                             {{ $sis->jenis_kelamin }}

@@ -95,6 +95,7 @@
                     <th style="padding:10px 20px; text-align:left; font-size:11px; font-weight:600; color:#94a3b8; text-transform:uppercase; letter-spacing:0.5px; border-bottom:1px solid #f1f5f9;">Nama Siswa</th>
                     <th style="padding:10px 16px; text-align:left; font-size:11px; font-weight:600; color:#94a3b8; text-transform:uppercase; letter-spacing:0.5px; border-bottom:1px solid #f1f5f9;">NIS / NIK</th>
                     <th style="padding:10px 16px; text-align:left; font-size:11px; font-weight:600; color:#94a3b8; text-transform:uppercase; letter-spacing:0.5px; border-bottom:1px solid #f1f5f9;">Kelas</th>
+                    <th style="padding:10px 16px; text-align:left; font-size:11px; font-weight:600; color:#94a3b8; text-transform:uppercase; letter-spacing:0.5px; border-bottom:1px solid #f1f5f9;">Program</th>
                     <th style="padding:10px 16px; text-align:left; font-size:11px; font-weight:600; color:#94a3b8; text-transform:uppercase; letter-spacing:0.5px; border-bottom:1px solid #f1f5f9; width:60px;">JK</th>
                     <th style="padding:10px 16px; text-align:left; font-size:11px; font-weight:600; color:#94a3b8; text-transform:uppercase; letter-spacing:0.5px; border-bottom:1px solid #f1f5f9;">Wali / Telepon</th>
                     <th style="padding:10px 20px; text-align:center; font-size:11px; font-weight:600; color:#94a3b8; text-transform:uppercase; letter-spacing:0.5px; border-bottom:1px solid #f1f5f9; width:100px;">Status</th>
@@ -103,7 +104,7 @@
             <tbody>
                 @if(empty($validRows))
                     <tr>
-                        <td colspan="6" style="padding:32px; text-align:center; color:#94a3b8; font-size:13.5px;">
+                        <td colspan="7" style="padding:32px; text-align:center; color:#94a3b8; font-size:13.5px;">
                             Tidak ada data valid yang siap disimpan.
                         </td>
                     </tr>
@@ -120,6 +121,9 @@
                         </td>
                         <td style="padding:12px 16px; font-size:13px; color:#475569; font-weight:500;">
                             {{ $row['kelas'] ?? '—' }}
+                        </td>
+                        <td style="padding:12px 16px; font-size:13px; font-weight:700; color:#10b981;">
+                            {{ \App\Models\Siswa::PROGRAM_LIST[$row['program']] ?? $row['program'] }}
                         </td>
                         <td style="padding:12px 16px; font-size:13px; color:#475569;">
                             {{ $row['jenis_kelamin'] }}

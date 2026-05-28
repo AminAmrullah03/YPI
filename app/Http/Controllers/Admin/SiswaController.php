@@ -57,10 +57,12 @@ class SiswaController extends Controller
             'telepon_wali' => 'nullable|string|max:20',
             'tanggal_masuk' => 'nullable|date',
             'kelas' => 'nullable|string|max:50',
+            'program' => 'required|string|in:fullday,fulltime',
             'status' => 'required|string|in:' . implode(',', array_keys(Siswa::STATUS_LIST)),
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ], [
             'nama.required' => 'Nama siswa wajib diisi.',
+            'program.required' => 'Program siswa wajib dipilih.',
             'jenis_kelamin.required' => 'Jenis kelamin wajib dipilih.',
             'status.required' => 'Status siswa wajib dipilih.',
             'foto.image' => 'Foto harus berupa gambar.',
@@ -111,10 +113,12 @@ class SiswaController extends Controller
             'telepon_wali' => 'nullable|string|max:20',
             'tanggal_masuk' => 'nullable|date',
             'kelas' => 'nullable|string|max:50',
+            'program' => 'required|string|in:fullday,fulltime',
             'status' => 'required|string|in:' . implode(',', array_keys(Siswa::STATUS_LIST)),
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ], [
             'nama.required' => 'Nama siswa wajib diisi.',
+            'program.required' => 'Program siswa wajib dipilih.',
             'jenis_kelamin.required' => 'Jenis kelamin wajib dipilih.',
             'status.required' => 'Status siswa wajib dipilih.',
             'foto.image' => 'Foto harus berupa gambar.',
@@ -201,6 +205,7 @@ class SiswaController extends Controller
                     'telepon_wali' => $row['telepon_wali'],
                     'tanggal_masuk' => $row['tanggal_masuk'],
                     'kelas' => $row['kelas'],
+                    'program' => $row['program'] ?? 'fullday',
                     'status' => $row['status'] ?? 'aktif',
                     'created_by' => $userId,
                 ]);
@@ -243,7 +248,8 @@ class SiswaController extends Controller
             $telpWali = $row[8] ?? null;
             $tglMasukRaw = $row[9] ?? null;
             $kelas = $row[10] ?? null;
-            $status = strtolower(trim($row[11] ?? 'aktif'));
+            $program = strtolower(trim($row[11] ?? 'fullday'));
+            $status = strtolower(trim($row[12] ?? 'aktif'));
 
             $errors = [];
 
@@ -254,6 +260,10 @@ class SiswaController extends Controller
 
             if ($jk !== 'L' && $jk !== 'P') {
                 $errors[] = "Jenis kelamin harus 'L' atau 'P' (ditemukan: '{$jk}').";
+            }
+
+            if (!in_array($program, ['fullday', 'fulltime'])) {
+                $program = 'fullday';
             }
 
             // Parse & validate birth date
@@ -294,6 +304,7 @@ class SiswaController extends Controller
                 'telepon_wali' => $telpWali,
                 'tanggal_masuk' => $tanggalMasuk,
                 'kelas' => $kelas,
+                'program' => $program,
                 'status' => $status,
             ];
 

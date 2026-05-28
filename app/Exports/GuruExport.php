@@ -6,8 +6,13 @@ use App\Models\Guru;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use Maatwebsite\Excel\Concerns\WithCustomValueBinder;
+use PhpOffice\PhpSpreadsheet\Cell\Cell;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
+use PhpOffice\PhpSpreadsheet\Cell\DefaultValueBinder;
 
-class GuruExport implements FromCollection, WithHeadings, WithMapping
+class GuruExport extends DefaultValueBinder implements FromCollection, WithHeadings, WithMapping, WithColumnFormatting, WithCustomValueBinder
 {
     protected $lembagaId;
     protected $status;
@@ -80,5 +85,25 @@ class GuruExport implements FromCollection, WithHeadings, WithMapping
             $guru->status_kepegawaian_label,
             $guru->status_label,
         ];
+    }
+
+    public function columnFormats(): array
+    {
+        return [
+            'C' => '@', // NIK
+            'D' => '@', // NUPTK
+            'J' => '@', // Telepon
+        ];
+    }
+
+    public function bindValue(Cell $cell, $value)
+    {
+        // Hindari konversi ke number/notasi ilmiah untuk NIK, NUPTK, dan No Telepon
+        if (is_numeric($value) && strlen($value) > 4) {
+            $cell->setValueExplicit($value, DataType::TYPE_STRING);
+            return true;
+        }
+
+        return parent::bindValue($cell, $value);
     }
 }

@@ -4,8 +4,13 @@ namespace App\Exports;
 
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use Maatwebsite\Excel\Concerns\WithCustomValueBinder;
+use PhpOffice\PhpSpreadsheet\Cell\Cell;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
+use PhpOffice\PhpSpreadsheet\Cell\DefaultValueBinder;
 
-class SiswaTemplateExport implements FromArray, WithHeadings
+class SiswaTemplateExport extends DefaultValueBinder implements FromArray, WithHeadings, WithColumnFormatting, WithCustomValueBinder
 {
     public function headings(): array
     {
@@ -21,6 +26,7 @@ class SiswaTemplateExport implements FromArray, WithHeadings
             'Telepon Wali',
             'Tanggal Masuk (YYYY-MM-DD)',
             'Kelas',
+            'Program (fullday/fulltime)',
             'Status (aktif/tidak_aktif/lulus/pindah)',
         ];
     }
@@ -40,6 +46,7 @@ class SiswaTemplateExport implements FromArray, WithHeadings
                 '08123456789',
                 '2021-07-15',
                 'Kelas 4',
+                'fullday',
                 'aktif',
             ],
             [
@@ -54,8 +61,29 @@ class SiswaTemplateExport implements FromArray, WithHeadings
                 '08234567890',
                 '2022-07-15',
                 'Kelas 3',
+                'fulltime',
                 'aktif',
             ]
         ];
+    }
+
+    public function columnFormats(): array
+    {
+        return [
+            'A' => '@', // NIS
+            'B' => '@', // NIK
+            'I' => '@', // Telepon Wali
+        ];
+    }
+
+    public function bindValue(Cell $cell, $value)
+    {
+        // Paksa type string jika bernilai angka (seperti NIS, NIK, Telepon) agar Excel tidak mengubahnya ke scientific/notasi ilmiah
+        if (is_numeric($value)) {
+            $cell->setValueExplicit($value, DataType::TYPE_STRING);
+            return true;
+        }
+
+        return parent::bindValue($cell, $value);
     }
 }

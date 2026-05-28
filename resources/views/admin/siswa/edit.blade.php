@@ -118,6 +118,19 @@
                         @enderror
                     </div>
 
+                    {{-- Program Siswa --}}
+                    <div class="form-group">
+                        <label for="program" class="form-label">Program Siswa <span style="color:#ef4444;">*</span></label>
+                        <select name="program" id="program" class="form-select @error('program') is-invalid @enderror" required>
+                            @foreach(\App\Models\Siswa::PROGRAM_LIST as $val => $label)
+                                <option value="{{ $val }}" {{ old('program', $siswa->program) == $val ? 'selected' : '' }}>{{ $label }}</option>
+                            @endforeach
+                        </select>
+                        @error('program')
+                            <span style="font-size:12px; color:#ef4444; margin-top:4px; display:block;">{{ $message }}</span>
+                        @enderror
+                    </div>
+
                     {{-- Foto --}}
                     <div class="form-group" style="grid-column: span 2;">
                         <label for="foto" class="form-label">Foto Siswa</label>
