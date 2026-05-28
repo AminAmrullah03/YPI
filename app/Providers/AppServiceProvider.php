@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Auth\UsernameUserProvider;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -24,6 +25,11 @@ class AppServiceProvider extends ServiceProvider
     {
         // Set Carbon locale ke Bahasa Indonesia
         Carbon::setLocale('id');
+
+        // Paksa HTTPS di lingkungan production untuk menghindari peringatan mixed content/keamanan
+        if (config('app.env') === 'production') {
+            URL::forceScheme('https');
+        }
 
         // Daftarkan custom provider untuk login menggunakan username
         Auth::provider('username', function ($app, array $config) {
