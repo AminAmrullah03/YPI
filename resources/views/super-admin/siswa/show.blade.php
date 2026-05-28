@@ -80,7 +80,11 @@
                     </div>
                     <div>
                         <div style="font-size:11px; color:#94a3b8; font-weight:600; text-transform:uppercase;">Kelas / Tingkat</div>
-                        <div style="font-size:14px; color:#1e293b; font-weight:600; margin-top:2px;">{{ $siswa->kelas }}</div>
+                        <div style="font-size:14px; color:#1e293b; font-weight:600; margin-top:2px;">{{ $siswa->kelas ?? '—' }}</div>
+                    </div>
+                    <div>
+                        <div style="font-size:11px; color:#94a3b8; font-weight:600; text-transform:uppercase;">Program Layanan</div>
+                        <div style="font-size:14px; color:#10b981; font-weight:700; margin-top:2px;">{{ $siswa->program_label }}</div>
                     </div>
                     <div>
                         <div style="font-size:11px; color:#94a3b8; font-weight:600; text-transform:uppercase;">Tanggal Mulai Aktif</div>

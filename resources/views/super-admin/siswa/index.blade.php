@@ -50,11 +50,21 @@
                 </select>
             </div>
 
+            <div style="width:130px;">
+                <label class="form-label">Program</label>
+                <select name="program" class="form-select">
+                    <option value="">Semua Program</option>
+                    @foreach(\App\Models\Siswa::PROGRAM_LIST as $val => $label)
+                        <option value="{{ $val }}" {{ request('program') == $val ? 'selected' : '' }}>{{ $label }}</option>
+                    @endforeach
+                </select>
+            </div>
+
             <div style="display:flex; gap:8px;">
                 <button type="submit" class="btn btn-primary" style="height:41px; padding:0 20px;">
                     <i class="ph ph-sliders-horizontal" style="font-size:16px;"></i> Filter
                 </button>
-                @if(request()->anyFilled(['search', 'lembaga_id', 'status', 'jenis_kelamin']))
+                @if(request()->anyFilled(['search', 'lembaga_id', 'status', 'jenis_kelamin', 'program']))
                     <a href="{{ route('super-admin.siswa.index') }}" class="btn btn-secondary" style="height:41px; display:inline-flex; align-items:center; justify-content:center; padding:0 16px;">Reset</a>
                 @endif
             </div>
@@ -72,6 +82,7 @@
                     <th style="padding:14px 16px;">NIS / NIK</th>
                     <th style="padding:14px 16px;">Lembaga</th>
                     <th style="padding:14px 16px;">Kelas</th>
+                    <th style="padding:14px 16px;">Program</th>
                     <th style="padding:14px 16px;">JK</th>
                     <th style="padding:14px 16px; text-align:center;">Status</th>
                     <th style="padding:14px 20px; text-align:center; width:80px;">Aksi</th>
@@ -80,7 +91,7 @@
             <tbody>
                 @if($siswaList->isEmpty())
                     <tr>
-                        <td colspan="8" style="padding:40px; text-align:center; color:#94a3b8;">
+                        <td colspan="9" style="padding:40px; text-align:center; color:#94a3b8;">
                             <i class="ph ph-student" style="font-size:40px; display:block; margin-bottom:8px;"></i>
                             Data siswa tidak ditemukan.
                         </td>
@@ -112,7 +123,10 @@
                             <div style="font-size:12px; color:#475569; margin-top:4px; font-weight:500;">{{ $sis->lembaga?->nama }}</div>
                         </td>
                         <td style="padding:12px 16px; font-size:13.5px; font-weight:600; color:#1e293b;">
-                            {{ $sis->kelas }}
+                            {{ $sis->kelas ?? '—' }}
+                        </td>
+                        <td style="padding:12px 16px; font-size:13px; font-weight:700; color:#10b981;">
+                            {{ $sis->program_label }}
                         </td>
                         <td style="padding:12px 16px; font-size:13px; color:#475569; font-weight:500;">
                             {{ $sis->jenis_kelamin }}
