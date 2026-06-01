@@ -8,10 +8,13 @@ use App\Http\Controllers\SuperAdmin\SiswaController as SuperAdminSiswaController
 use App\Http\Controllers\SuperAdmin\GuruController as SuperAdminGuruController;
 use App\Http\Controllers\SuperAdmin\LaporanController as SuperAdminLaporanController;
 use App\Http\Controllers\SuperAdmin\AuditLogController;
+use App\Http\Controllers\SuperAdmin\SktmController as SuperAdminSktmController;
+use App\Http\Controllers\SuperAdmin\SktmRekapController as SuperAdminSktmRekapController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
 use App\Http\Controllers\Admin\SiswaController as AdminSiswaController;
 use App\Http\Controllers\Admin\GuruController as AdminGuruController;
 use App\Http\Controllers\Admin\LaporanController as AdminLaporanController;
+use App\Http\Controllers\Admin\SktmRekapController as AdminSktmRekapController;
 use Illuminate\Support\Facades\Route;
 
 // ─── Auth ─────────────────────────────────────────────────────────────────────
@@ -66,6 +69,15 @@ Route::prefix('super-admin')
 
         // Audit Log
         Route::get('audit-log', [AuditLogController::class, 'index'])->name('audit-log.index');
+
+        // SKTM / Tidak Mampu Verification
+        Route::get('sktm', [SuperAdminSktmController::class, 'index'])->name('sktm.index');
+        Route::get('sktm/{siswa}/berkas', [SuperAdminSktmController::class, 'viewBerkas'])->name('sktm.berkas');
+        Route::post('sktm/{siswa}/approve', [SuperAdminSktmController::class, 'approve'])->name('sktm.approve');
+        Route::post('sktm/{siswa}/reject', [SuperAdminSktmController::class, 'reject'])->name('sktm.reject');
+
+        // SKTM Rekap
+        Route::get('sktm-rekap', [SuperAdminSktmRekapController::class, 'index'])->name('sktm.rekap');
     });
 
 // ─── Admin Lembaga ────────────────────────────────────────────────────────────
@@ -79,6 +91,8 @@ Route::prefix('admin')
         // Siswa
         Route::resource('siswa', AdminSiswaController::class);
         Route::patch('siswa/{siswa}/status', [AdminSiswaController::class, 'updateStatus'])->name('siswa.status');
+        Route::post('siswa/{siswa}/sktm', [AdminSiswaController::class, 'uploadSktm'])->name('siswa.sktm');
+        Route::get('siswa/{siswa}/sktm/berkas', [AdminSiswaController::class, 'viewSktmBerkas'])->name('siswa.sktm.berkas');
         Route::get('siswa/import/form', [AdminSiswaController::class, 'importForm'])->name('siswa.import-form');
         Route::post('siswa/import', [AdminSiswaController::class, 'import'])->name('siswa.import');
         Route::get('siswa/template/download', [AdminSiswaController::class, 'downloadTemplate'])->name('siswa.template');
@@ -95,4 +109,7 @@ Route::prefix('admin')
         Route::get('laporan/export-siswa', [AdminLaporanController::class, 'exportSiswa'])->name('laporan.export-siswa');
         Route::get('laporan/export-guru', [AdminLaporanController::class, 'exportGuru'])->name('laporan.export-guru');
         Route::get('laporan/export-pdf', [AdminLaporanController::class, 'exportPdf'])->name('laporan.export-pdf');
+
+        // SKTM Rekap
+        Route::get('sktm-rekap', [AdminSktmRekapController::class, 'index'])->name('sktm.rekap');
     });

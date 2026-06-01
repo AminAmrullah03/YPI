@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('mata_pelajaran')->nullable();
             $table->date('tanggal_masuk')->nullable();
             $table->date('tanggal_keluar')->nullable(); // null = masih aktif
-            $table->string('status_kepegawaian')->default('honorer'); // tetap, honorer, magang
+            $table->string('status_kepegawaian')->default('tidak_tetap'); // tetap, tidak_tetap, karyawan
             $table->string('status')->default('aktif'); // aktif, tidak_aktif, keluar, pensiun
             $table->string('foto')->nullable();
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();

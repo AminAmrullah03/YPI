@@ -33,6 +33,14 @@ class SiswaController extends Controller
             $query->where('jenis_kelamin', $request->input('jenis_kelamin'));
         }
 
+        if ($request->filled('program')) {
+            $query->where('program', $request->input('program'));
+        }
+
+        if ($request->filled('status_sktm')) {
+            $query->where('status_sktm', $request->input('status_sktm'));
+        }
+
         $siswaList = $query->latest()->paginate(15)->withQueryString();
 
         return view('admin.siswa.index', compact('siswaList'));
@@ -322,5 +330,49 @@ class SiswaController extends Controller
         session()->put('siswa_import_data', $validRows);
 
         return view('admin.siswa.import_preview', compact('validRows', 'invalidRows'));
+    }
+
+    public function uploadSktm(Request $request, $id)
+    {
+        $lembagaId = auth()->user()->lembaga_id;
+        $siswa = Siswa::where('lembaga_id', $lembagaId)->findOrFail($id);
+
+        $request->validate([
+            'dokumen_sktm' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        ], [
+            'dokumen_sktm.required' => 'Dokumen bukti SKTM wajib diunggah.',
+            'dokumen_sktm.mimes' => 'Format dokumen harus berupa PDF, JPG, JPEG, atau PNG.',
+            'dokumen_sktm.max' => 'Ukuran dokumen maksimal 2MB.',
+        ]);
+
+        if ($request->hasFile('dokumen_sktm')) {
+            // Hapus berkas lama jika ada
+            if ($siswa->dokumen_sktm) {
+                Storage::disk('public')->delete($siswa->dokumen_sktm);
+            }
+
+            $path = $request->file('dokumen_sktm')->store('sktm', 'public');
+            $siswa->dokumen_sktm = $path;
+            $siswa->status_sktm = 'pending';
+            $siswa->keterangan_sktm = null; // reset catatan penolakan lama jika ada
+            $siswa->save();
+        }
+
+        return redirect()->route('admin.siswa.show', $siswa->id)->with('success', 'Dokumen SKTM berhasil diunggah. Menunggu verifikasi Yayasan.');
+    }
+
+    /**
+     * Sajikan berkas SKTM siswa langsung dari controller (aman, terautentikasi).
+     */
+    public function viewSktmBerkas($id)
+    {
+        $lembagaId = auth()->user()->lembaga_id;
+        $siswa = Siswa::where('lembaga_id', $lembagaId)->findOrFail($id);
+
+        if (!$siswa->dokumen_sktm || !\Illuminate\Support\Facades\Storage::disk('public')->exists($siswa->dokumen_sktm)) {
+            abort(404, 'Berkas dokumen tidak ditemukan.');
+        }
+
+        return \Illuminate\Support\Facades\Storage::disk('public')->response($siswa->dokumen_sktm);
     }
 }

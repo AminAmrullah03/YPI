@@ -18,6 +18,8 @@ class DashboardController extends Controller
             'total_guru_aktif'    => Guru::where('status', 'aktif')->count(),
             'total_guru'          => Guru::count(),
             'total_lembaga'       => Lembaga::where('is_active', true)->count(),
+            'sktm_approved'       => Siswa::where('status_sktm', 'approved')->count(),
+            'sktm_pending'        => Siswa::where('status_sktm', 'pending')->count(),
         ];
 
         // Data per lembaga untuk grafik

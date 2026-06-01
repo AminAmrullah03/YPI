@@ -9,11 +9,11 @@
 
     {{-- Header Actions & Filter --}}
     <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; margin-bottom:24px;">
-        <div style="flex:1; min-width:300px; max-width:600px;">
+        <div style="flex:1; min-width:300px;">
             <form method="GET" action="{{ route('admin.siswa.index') }}" style="display:flex; gap:10px; flex-wrap:wrap;">
                 <div style="position:relative; flex:1; min-width:200px;">
                     <i class="ph ph-magnifying-glass" style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#94a3b8; font-size:16px;"></i>
-                    <input type="text" name="search" class="form-input" placeholder="Cari nama, NIS, NIK..." value="{{ request('search') }}" style="padding-left:38px;">
+                    <input type="text" name="search" class="form-input" placeholder="Cari nama, NISN, NIK..." value="{{ request('search') }}" style="padding-left:38px;">
                 </div>
                 <select name="status" class="form-select" style="width:130px;">
                     <option value="">Semua Status</option>
@@ -21,13 +21,25 @@
                         <option value="{{ $val }}" {{ request('status') == $val ? 'selected' : '' }}>{{ $label }}</option>
                     @endforeach
                 </select>
-                <select name="jenis_kelamin" class="form-select" style="width:100px;">
+                <select name="jenis_kelamin" class="form-select" style="width:70px;">
                     <option value="">JK</option>
-                    <option value="L" {{ request('jenis_kelamin') == 'L' ? 'selected' : '' }}>L (Laki-laki)</option>
-                    <option value="P" {{ request('jenis_kelamin') == 'P' ? 'selected' : '' }}>P (Perempuan)</option>
+                    <option value="L" {{ request('jenis_kelamin') == 'L' ? 'selected' : '' }}>L</option>
+                    <option value="P" {{ request('jenis_kelamin') == 'P' ? 'selected' : '' }}>P</option>
+                </select>
+                <select name="program" class="form-select" style="width:140px;">
+                    <option value="">Semua Program</option>
+                    @foreach(\App\Models\Siswa::PROGRAM_LIST as $val => $label)
+                        <option value="{{ $val }}" {{ request('program') == $val ? 'selected' : '' }}>{{ $label }}</option>
+                    @endforeach
+                </select>
+                <select name="status_sktm" class="form-select" style="width:150px;">
+                    <option value="">Semua SKTM</option>
+                    @foreach(\App\Models\Siswa::STATUS_SKTM_LIST as $val => $label)
+                        <option value="{{ $val }}" {{ request('status_sktm') == $val ? 'selected' : '' }}>{{ $label }}</option>
+                    @endforeach
                 </select>
                 <button type="submit" class="btn btn-primary" style="padding:10px 16px;">Filter</button>
-                @if(request()->anyFilled(['search', 'status', 'jenis_kelamin']))
+                @if(request()->anyFilled(['search', 'status', 'jenis_kelamin', 'program', 'status_sktm']))
                     <a href="{{ route('admin.siswa.index') }}" class="btn btn-secondary" style="padding:10px 16px;">Reset</a>
                 @endif
             </form>
@@ -51,7 +63,7 @@
                 <tr>
                     <th style="padding:14px 20px; width:50px;">Foto</th>
                     <th style="padding:14px 16px;">Nama Siswa</th>
-                    <th style="padding:14px 16px;">NIS / NIK</th>
+                    <th style="padding:14px 16px;">NISN / NIK</th>
                     <th style="padding:14px 16px;">Kelas</th>
                     <th style="padding:14px 16px;">Program</th>
                     <th style="padding:14px 16px;">JK</th>
@@ -81,11 +93,28 @@
                             @endif
                         </td>
                         <td style="padding:12px 16px;">
-                            <div style="font-weight:700; font-size:14px; color:#1e293b;">{{ $sis->nama }}</div>
+                            <div style="font-weight:700; font-size:14px; color:#1e293b; display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                                <span>{{ $sis->nama }}</span>
+                                @if($sis->status_sktm !== 'none')
+                                    @php
+                                        $sktmBadge = [
+                                            'pending' => ['bg' => '#fef3c7', 'color' => '#d97706', 'text' => 'SKTM Pending'],
+                                            'approved' => ['bg' => '#d1fae5', 'color' => '#059669', 'text' => 'SKTM'],
+                                            'rejected' => ['bg' => '#fee2e2', 'color' => '#dc2626', 'text' => 'SKTM Ditolak'],
+                                        ][$sis->status_sktm] ?? null;
+                                    @endphp
+                                    @if($sktmBadge)
+                                        <span style="font-size:10px; font-weight:700; background:{{ $sktmBadge['bg'] }}; color:{{ $sktmBadge['color'] }}; padding:1px 6px; border-radius:8px; display:inline-flex; align-items:center; gap:2px;">
+                                            <i class="ph ph-shield-check" style="font-size:11px;"></i>
+                                            {{ $sktmBadge['text'] }}
+                                        </span>
+                                    @endif
+                                @endif
+                            </div>
                             <div style="font-size:11px; color:#94a3b8; margin-top:2px;">Masuk: {{ $sis->tanggal_masuk?->format('d M Y') ?? '—' }}</div>
                         </td>
                         <td style="padding:12px 16px; font-size:13px; color:#475569;">
-                            <div>NIS: <strong>{{ $sis->nis ?? '—' }}</strong></div>
+                            <div>NISN: <strong>{{ $sis->nis ?? '—' }}</strong></div>
                             <div style="font-size:11px; color:#94a3b8; margin-top:2px;">NIK: {{ $sis->nik ?? '—' }}</div>
                         </td>
                         <td style="padding:12px 16px; font-size:13.5px; font-weight:600; color:#1e293b;">

@@ -22,9 +22,9 @@ class Guru extends Model
     ];
 
     const STATUS_KEPEGAWAIAN_LIST = [
-        'tetap'   => 'Guru Tetap',
-        'honorer' => 'Honorer',
-        'magang'  => 'Magang',
+        'tetap'       => 'Guru Tetap',
+        'tidak_tetap' => 'Guru Tidak Tetap',
+        'karyawan'    => 'Karyawan',
     ];
 
     const JENIS_KELAMIN = [

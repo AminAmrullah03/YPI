@@ -16,11 +16,15 @@ class SiswaExport extends DefaultValueBinder implements FromCollection, WithHead
 {
     protected $lembagaId;
     protected $status;
+    protected $program;
+    protected $statusSktm;
 
-    public function __construct($lembagaId = null, $status = null)
+    public function __construct($lembagaId = null, $status = null, $program = null, $statusSktm = null)
     {
         $this->lembagaId = $lembagaId;
         $this->status = $status;
+        $this->program = $program;
+        $this->statusSktm = $statusSktm;
     }
 
     public function collection()
@@ -35,6 +39,14 @@ class SiswaExport extends DefaultValueBinder implements FromCollection, WithHead
             $query->where('status', $this->status);
         }
 
+        if ($this->program) {
+            $query->where('program', $this->program);
+        }
+
+        if ($this->statusSktm) {
+            $query->where('status_sktm', $this->statusSktm);
+        }
+
         return $query->get();
     }
 
@@ -43,7 +55,7 @@ class SiswaExport extends DefaultValueBinder implements FromCollection, WithHead
         return [
             'No',
             'Lembaga',
-            'NIS',
+            'NISN',
             'NIK',
             'Nama Lengkap',
             'Jenis Kelamin',
@@ -56,6 +68,7 @@ class SiswaExport extends DefaultValueBinder implements FromCollection, WithHead
             'Kelas',
             'Program',
             'Status',
+            'Status SKTM',
         ];
     }
 
@@ -80,13 +93,14 @@ class SiswaExport extends DefaultValueBinder implements FromCollection, WithHead
             $siswa->kelas ?? '—',
             $siswa->program_label,
             $siswa->status_label,
+            $siswa->status_sktm_label,
         ];
     }
 
     public function columnFormats(): array
     {
         return [
-            'C' => '@', // NIS
+            'C' => '@', // NISN
             'D' => '@', // NIK
             'K' => '@', // Telepon Wali
         ];

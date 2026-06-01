@@ -33,15 +33,23 @@ class LaporanController extends Controller
     {
         $lembagaId = auth()->user()->lembaga_id;
         $status = $request->input('status');
+        $program = $request->input('program');
+        $statusSktm = $request->input('status_sktm');
 
         $lem = auth()->user()->lembaga;
         $fileName = 'laporan-siswa-' . strtolower($lem->jenis ?? 'lembaga');
         if ($status) {
             $fileName .= '-' . $status;
         }
+        if ($program) {
+            $fileName .= '-' . $program;
+        }
+        if ($statusSktm) {
+            $fileName .= '-' . $statusSktm;
+        }
         $fileName .= '-' . date('YmdHis') . '.xlsx';
 
-        return Excel::download(new SiswaExport($lembagaId, $status), $fileName);
+        return Excel::download(new SiswaExport($lembagaId, $status, $program, $statusSktm), $fileName);
     }
 
     public function exportGuru(Request $request)

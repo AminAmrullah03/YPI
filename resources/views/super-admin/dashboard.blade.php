@@ -239,6 +239,27 @@
             </div>
         </div>
 
+        {{-- Siswa Kurang Mampu (SKTM) --}}
+        <a href="{{ route('super-admin.sktm.rekap') }}" style="text-decoration:none;">
+        <div class="stat-card" style="--stat-color:#f43f5e; --stat-icon-bg:#fff1f2; --stat-bg:rgba(244,63,94,0.05); border-color:transparent; cursor:pointer;">
+            <div class="stat-card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="color:#f43f5e;">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+            </div>
+            <div>
+                <div class="stat-card-label">Siswa Kurang Mampu</div>
+                <div class="stat-card-value" style="color:#f43f5e;">{{ number_format($stats['sktm_approved']) }}</div>
+                <div class="stat-card-sub" style="display:flex; align-items:center; gap:6px;">
+                    SKTM Terverifikasi
+                    @if($stats['sktm_pending'] > 0)
+                        <span style="background:#fef3c7; color:#d97706; font-size:10px; font-weight:700; padding:1px 6px; border-radius:8px;">{{ $stats['sktm_pending'] }} pending</span>
+                    @endif
+                </div>
+            </div>
+        </div>
+        </a>
+
     </div>
 
     {{-- ── Chart + Lembaga Summary Grid ── --}}

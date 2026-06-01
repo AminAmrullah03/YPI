@@ -439,6 +439,32 @@
                         </svg>
                         <span class="nav-item-label">Data Guru</span>
                     </a>
+                    @php
+                        $pendingSktmCount = \App\Models\Siswa::where('status_sktm', 'pending')->count();
+                    @endphp
+                    <a href="{{ route('super-admin.sktm.index') }}"
+                       class="nav-item {{ request()->routeIs('super-admin.sktm.*') ? 'active' : '' }}"
+                       data-tooltip="Verifikasi SKTM">
+                        <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5.586a1 1 0 0 1 .707.293l5.414 5.414a1 1 0 0 1 .293.707V19a2 2 0 0 1-2 2z"/>
+                        </svg>
+                        <span class="nav-item-label" style="display:flex; align-items:center; justify-content:space-between; width:100%; flex:1;">
+                            <span>Verifikasi SKTM</span>
+                            @if($pendingSktmCount > 0)
+                                <span class="badge-pending-count" style="background:#ef4444; color:#fff; font-size:9.5px; font-weight:700; padding:1px 5px; border-radius:999px; margin-left:6px; flex-shrink:0; line-height:1.2;">
+                                    {{ $pendingSktmCount }}
+                                </span>
+                            @endif
+                        </span>
+                    </a>
+                    <a href="{{ route('super-admin.sktm.rekap') }}"
+                       class="nav-item {{ request()->routeIs('super-admin.sktm.rekap') ? 'active' : '' }}"
+                       data-tooltip="Rekap SKTM">
+                        <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        </svg>
+                        <span class="nav-item-label">Rekap SKTM</span>
+                    </a>
                 </div>
             </div>
 
@@ -514,6 +540,20 @@
                             <path d="M3 3v18h18M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/>
                         </svg>
                         <span class="nav-item-label">Laporan & Export</span>
+                    </a>
+                    @php $adminSktmPending = \App\Models\Siswa::where('lembaga_id', auth()->user()->lembaga_id)->where('status_sktm', 'pending')->count(); @endphp
+                    <a href="{{ route('admin.sktm.rekap') }}"
+                       class="nav-item {{ request()->routeIs('admin.sktm.rekap') ? 'active' : '' }}"
+                       data-tooltip="Rekap SKTM">
+                        <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="color:#f43f5e;">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        </svg>
+                        <span class="nav-item-label" style="display:flex; align-items:center; justify-content:space-between; width:100%; flex:1;">
+                            <span>Rekap SKTM</span>
+                            @if($adminSktmPending > 0)
+                                <span style="background:#f59e0b; color:#fff; font-size:9.5px; font-weight:700; padding:1px 5px; border-radius:999px; margin-left:6px; flex-shrink:0; line-height:1.2;">{{ $adminSktmPending }}</span>
+                            @endif
+                        </span>
                     </a>
                 </div>
             </div>

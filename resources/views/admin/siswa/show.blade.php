@@ -32,10 +32,23 @@
             @endif
 
             <h2 style="margin:0 0 4px; font-size:18px; font-weight:800; color:#1e293b;">{{ $siswa->nama }}</h2>
-            <div style="font-size:13px; color:#64748b; font-family:monospace; font-weight:600; margin-bottom:12px;">NIS: {{ $siswa->nis ?? '—' }}</div>
+            <div style="font-size:13px; color:#64748b; font-family:monospace; font-weight:600; margin-bottom:12px;">NISN: {{ $siswa->nis ?? '—' }}</div>
             
-            <div style="margin-bottom:16px;">
+            <div style="margin-bottom:16px; display:flex; flex-direction:column; align-items:center; gap:8px;">
                 <span class="badge badge-{{ $siswa->status }}">{{ $siswa->status_label }}</span>
+                @if($siswa->status_sktm !== 'none')
+                    @php
+                        $sktmColors = [
+                            'pending' => ['bg' => '#fffbeb', 'color' => '#d97706', 'border' => 'rgba(217,119,6,0.15)'],
+                            'approved' => ['bg' => '#ecfdf5', 'color' => '#059669', 'border' => 'rgba(16,185,129,0.15)'],
+                            'rejected' => ['bg' => '#fef2f2', 'color' => '#ef4444', 'border' => 'rgba(239,68,68,0.15)'],
+                        ];
+                        $c = $sktmColors[$siswa->status_sktm] ?? ['bg' => '#f1f5f9', 'color' => '#475569', 'border' => '#e2e8f0'];
+                    @endphp
+                    <span class="badge" style="background:{{ $c['bg'] }}; color:{{ $c['color'] }}; border-color:{{ $c['border'] }};">
+                        <i class="ph ph-file-text" style="vertical-align: middle; margin-right: 2px;"></i> SKTM: {{ $siswa->status_sktm_label }}
+                    </span>
+                @endif
             </div>
 
             <div style="width:100%; border-top:1px solid #f1f5f9; padding-top:16px; margin-top:8px; text-align:left; display:flex; flex-direction:column; gap:10px;">
@@ -125,6 +138,74 @@
                             @endif
                         </div>
                     </div>
+                </div>
+            </div>
+
+            {{-- SKTM details --}}
+            <div class="card" style="margin-top: 10px;">
+                <div style="font-size:15px; font-weight:700; color:#1e293b; margin-bottom:16px; border-bottom:1px solid #f1f5f9; padding-bottom:8px; display:flex; align-items:center; gap:8px;">
+                    <i class="ph ph-file-text" style="color:#10b981;"></i>
+                    Surat Keterangan Tidak Mampu (SKTM) / Kurang Mampu
+                </div>
+
+                <div style="display:grid; grid-template-columns: 1fr; gap:16px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+                        <div>
+                            <div style="font-size:11px; color:#94a3b8; font-weight:600; text-transform:uppercase;">Status Verifikasi Yayasan</div>
+                            <div style="font-size:14px; font-weight:700; margin-top:2px; display:flex; align-items:center; gap:6px;">
+                                @php
+                                    $sktmText = [
+                                        'none' => 'Bukan Penerima (Belum Mengajukan)',
+                                        'pending' => 'Menunggu Verifikasi Yayasan',
+                                        'approved' => 'Terverifikasi (Disetujui Yayasan)',
+                                        'rejected' => 'Ditolak',
+                                    ];
+                                    $sktmTextColors = [
+                                        'none' => '#64748b',
+                                        'pending' => '#d97706',
+                                        'approved' => '#059669',
+                                        'rejected' => '#ef4444',
+                                    ];
+                                @endphp
+                                <span style="color: {{ $sktmTextColors[$siswa->status_sktm] ?? '#1e293b' }};">
+                                    {{ $sktmText[$siswa->status_sktm] ?? $siswa->status_sktm }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div>
+                            @if($siswa->dokumen_sktm)
+                                <a href="{{ route('admin.siswa.sktm.berkas', $siswa->id) }}" target="_blank" class="btn btn-secondary btn-sm" style="display:inline-flex; align-items:center; gap:6px; font-weight:600; color:#0891b2; border-color:#0891b2; background:rgba(8,145,178,0.04);">
+                                    <i class="ph ph-file-pdf" style="font-size:16px;"></i> Lihat Berkas Terunggah
+                                </a>
+                            @endif
+                        </div>
+                    </div>
+
+                    @if($siswa->status_sktm === 'rejected' && $siswa->keterangan_sktm)
+                        <div style="background:#fef2f2; border:1px solid #fecaca; border-radius:10px; padding:12px 16px;">
+                            <div style="font-size:11px; color:#b91c1c; font-weight:700; text-transform:uppercase;">Catatan Alasan Penolakan:</div>
+                            <div style="font-size:13px; color:#7f1d1d; margin-top:4px; font-style:italic;">"{{ $siswa->keterangan_sktm }}"</div>
+                        </div>
+                    @endif
+
+                    @if($siswa->status_sktm === 'none' || $siswa->status_sktm === 'rejected')
+                        <div style="border-top:1px dashed #e2e8f0; padding-top:16px; margin-top:4px;">
+                            <form method="POST" action="{{ route('admin.siswa.sktm', $siswa->id) }}" enctype="multipart/form-data" style="display:flex; flex-direction:column; gap:12px;">
+                                @csrf
+                                <div>
+                                    <label for="dokumen_sktm" class="form-label" style="font-weight:700;">Unggah Dokumen SKTM Baru <span style="color:#ef4444;">*</span></label>
+                                    <input type="file" name="dokumen_sktm" id="dokumen_sktm" class="form-input" accept="image/*,application/pdf" required style="padding:10px;">
+                                    <small style="color:#94a3b8; font-size:11px; margin-top:4px; display:block;">Menerima file PDF, JPG, JPEG, PNG. Ukuran maksimal file 2MB.</small>
+                                </div>
+                                <div style="display:flex; justify-content:flex-end;">
+                                    <button type="submit" class="btn btn-primary btn-sm" style="display:inline-flex; align-items:center; gap:6px;">
+                                        <i class="ph ph-paper-plane-tilt"></i> Kirim Pengajuan SKTM
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    @endif
                 </div>
             </div>
 

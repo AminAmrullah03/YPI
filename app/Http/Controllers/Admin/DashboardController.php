@@ -14,12 +14,14 @@ class DashboardController extends Controller
         $lembagaId = $lembaga?->id;
 
         $stats = [
-            'siswa_aktif'    => Siswa::where('lembaga_id', $lembagaId)->where('status', 'aktif')->count(),
-            'siswa_total'    => Siswa::where('lembaga_id', $lembagaId)->count(),
-            'guru_aktif'     => Guru::where('lembaga_id', $lembagaId)->where('status', 'aktif')->count(),
-            'guru_total'     => Guru::where('lembaga_id', $lembagaId)->count(),
+            'siswa_aktif'       => Siswa::where('lembaga_id', $lembagaId)->where('status', 'aktif')->count(),
+            'siswa_total'       => Siswa::where('lembaga_id', $lembagaId)->count(),
+            'guru_aktif'        => Guru::where('lembaga_id', $lembagaId)->where('status', 'aktif')->count(),
+            'guru_total'        => Guru::where('lembaga_id', $lembagaId)->count(),
             'siswa_tidak_aktif' => Siswa::where('lembaga_id', $lembagaId)->where('status', 'tidak_aktif')->count(),
-            'guru_keluar'    => Guru::where('lembaga_id', $lembagaId)->whereIn('status', ['keluar', 'pensiun'])->count(),
+            'guru_keluar'       => Guru::where('lembaga_id', $lembagaId)->whereIn('status', ['keluar', 'pensiun'])->count(),
+            'sktm_approved'     => Siswa::where('lembaga_id', $lembagaId)->where('status_sktm', 'approved')->count(),
+            'sktm_pending'      => Siswa::where('lembaga_id', $lembagaId)->where('status_sktm', 'pending')->count(),
         ];
 
         // Data chart: distribusi status siswa

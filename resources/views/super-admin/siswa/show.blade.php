@@ -29,7 +29,7 @@
             @endif
 
             <h2 style="margin:0 0 4px; font-size:18px; font-weight:800; color:#1e293b;">{{ $siswa->nama }}</h2>
-            <div style="font-size:13px; color:#64748b; font-family:monospace; font-weight:600; margin-bottom:12px;">NIS: {{ $siswa->nis ?? '—' }}</div>
+            <div style="font-size:13px; color:#64748b; font-family:monospace; font-weight:600; margin-bottom:12px;">NISN: {{ $siswa->nis ?? '—' }}</div>
             
             <div style="margin-bottom:16px;">
                 <span class="badge badge-{{ $siswa->status }}">{{ $siswa->status_label }}</span>

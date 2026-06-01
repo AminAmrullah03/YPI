@@ -63,7 +63,7 @@
             </p>
 
             <form method="GET" action="{{ route('super-admin.laporan.export-siswa') }}">
-                <div class="form-group">
+                <div class="form-group" style="margin-bottom:12px;">
                     <label class="form-label">Lembaga</label>
                     <select name="lembaga_id" class="form-select">
                         <option value="">Semua Lembaga (Konsolidasi)</option>
@@ -73,11 +73,31 @@
                     </select>
                 </div>
 
-                <div class="form-group" style="margin-bottom:24px;">
+                <div class="form-group" style="margin-bottom:12px;">
                     <label class="form-label">Status Siswa</label>
                     <select name="status" class="form-select">
                         <option value="">Semua Status</option>
                         @foreach(\App\Models\Siswa::STATUS_LIST as $val => $label)
+                            <option value="{{ $val }}">{{ $label }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="form-group" style="margin-bottom:12px;">
+                    <label class="form-label">Program</label>
+                    <select name="program" class="form-select">
+                        <option value="">Semua Program</option>
+                        @foreach(\App\Models\Siswa::PROGRAM_LIST as $val => $label)
+                            <option value="{{ $val }}">{{ $label }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="form-group" style="margin-bottom:24px;">
+                    <label class="form-label">Status SKTM</label>
+                    <select name="status_sktm" class="form-select">
+                        <option value="">Semua SKTM</option>
+                        @foreach(\App\Models\Siswa::STATUS_SKTM_LIST as $val => $label)
                             <option value="{{ $val }}">{{ $label }}</option>
                         @endforeach
                     </select>

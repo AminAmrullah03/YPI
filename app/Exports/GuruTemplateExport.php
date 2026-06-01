@@ -27,7 +27,7 @@ class GuruTemplateExport extends DefaultValueBinder implements FromArray, WithHe
             'Jabatan',
             'Mata Pelajaran',
             'Tanggal Masuk (YYYY-MM-DD)',
-            'Status Kepegawaian (tetap/honorer/magang)',
+            'Status Kepegawaian (tetap/tidak_tetap/karyawan)',
             'Status (aktif/tidak_aktif)',
         ];
     }
@@ -64,7 +64,7 @@ class GuruTemplateExport extends DefaultValueBinder implements FromArray, WithHe
                 'Guru Mata Pelajaran',
                 'Bahasa Inggris',
                 '2015-07-01',
-                'honorer',
+                'tidak_tetap',
                 'aktif',
             ]
         ];

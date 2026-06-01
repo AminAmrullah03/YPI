@@ -15,7 +15,7 @@
                 <label class="form-label">Cari Siswa</label>
                 <div style="position:relative;">
                     <i class="ph ph-magnifying-glass" style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#94a3b8; font-size:16px;"></i>
-                    <input type="text" name="search" class="form-input" placeholder="Nama, NIS, atau NIK..." value="{{ request('search') }}" style="padding-left:38px;">
+                    <input type="text" name="search" class="form-input" placeholder="Nama, NISN, atau NIK..." value="{{ request('search') }}" style="padding-left:38px;">
                 </div>
             </div>
 
@@ -60,11 +60,21 @@
                 </select>
             </div>
 
+            <div style="width:150px;">
+                <label class="form-label">Status SKTM</label>
+                <select name="status_sktm" class="form-select">
+                    <option value="">Semua SKTM</option>
+                    @foreach(\App\Models\Siswa::STATUS_SKTM_LIST as $val => $label)
+                        <option value="{{ $val }}" {{ request('status_sktm') == $val ? 'selected' : '' }}>{{ $label }}</option>
+                    @endforeach
+                </select>
+            </div>
+
             <div style="display:flex; gap:8px;">
                 <button type="submit" class="btn btn-primary" style="height:41px; padding:0 20px;">
                     <i class="ph ph-sliders-horizontal" style="font-size:16px;"></i> Filter
                 </button>
-                @if(request()->anyFilled(['search', 'lembaga_id', 'status', 'jenis_kelamin', 'program']))
+                @if(request()->anyFilled(['search', 'lembaga_id', 'status', 'jenis_kelamin', 'program', 'status_sktm']))
                     <a href="{{ route('super-admin.siswa.index') }}" class="btn btn-secondary" style="height:41px; display:inline-flex; align-items:center; justify-content:center; padding:0 16px;">Reset</a>
                 @endif
             </div>
@@ -79,7 +89,7 @@
                 <tr>
                     <th style="padding:14px 20px; width:50px;">Foto</th>
                     <th style="padding:14px 16px;">Nama Lengkap</th>
-                    <th style="padding:14px 16px;">NIS / NIK</th>
+                    <th style="padding:14px 16px;">NISN / NIK</th>
                     <th style="padding:14px 16px;">Lembaga</th>
                     <th style="padding:14px 16px;">Kelas</th>
                     <th style="padding:14px 16px;">Program</th>
@@ -109,11 +119,28 @@
                             @endif
                         </td>
                         <td style="padding:12px 16px;">
-                            <div style="font-weight:700; font-size:14px; color:#1e293b;">{{ $sis->nama }}</div>
+                            <div style="font-weight:700; font-size:14px; color:#1e293b; display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                                <span>{{ $sis->nama }}</span>
+                                @if($sis->status_sktm !== 'none')
+                                    @php
+                                        $sktmBadge = [
+                                            'pending' => ['bg' => '#fef3c7', 'color' => '#d97706', 'text' => 'SKTM Pending'],
+                                            'approved' => ['bg' => '#d1fae5', 'color' => '#059669', 'text' => 'SKTM'],
+                                            'rejected' => ['bg' => '#fee2e2', 'color' => '#dc2626', 'text' => 'SKTM Ditolak'],
+                                        ][$sis->status_sktm] ?? null;
+                                    @endphp
+                                    @if($sktmBadge)
+                                        <span style="font-size:10px; font-weight:700; background:{{ $sktmBadge['bg'] }}; color:{{ $sktmBadge['color'] }}; padding:1px 6px; border-radius:8px; display:inline-flex; align-items:center; gap:2px;">
+                                            <i class="ph ph-shield-check" style="font-size:11px;"></i>
+                                            {{ $sktmBadge['text'] }}
+                                        </span>
+                                    @endif
+                                @endif
+                            </div>
                             <div style="font-size:11px; color:#94a3b8; margin-top:2px;">Masuk: {{ $sis->tanggal_masuk?->format('d M Y') ?? '—' }}</div>
                         </td>
                         <td style="padding:12px 16px; font-size:13px; color:#475569;">
-                            <div>NIS: <strong>{{ $sis->nis ?? '—' }}</strong></div>
+                            <div>NISN: <strong>{{ $sis->nis ?? '—' }}</strong></div>
                             <div style="font-size:11px; color:#94a3b8; margin-top:2px;">NIK: {{ $sis->nik ?? '—' }}</div>
                         </td>
                         <td style="padding:12px 16px;">

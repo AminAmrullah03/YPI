@@ -269,7 +269,16 @@ class GuruController extends Controller
             $jabatan = $row[9] ?? null;
             $mapel = $row[10] ?? null;
             $tglMasukRaw = $row[11] ?? null;
-            $kepegawaian = strtolower(trim($row[12] ?? 'honorer'));
+            $kepegawaianRaw = strtolower(trim($row[12] ?? ''));
+            $kepegawaian = 'tidak_tetap';
+            if (str_contains($kepegawaianRaw, 'tetap') && !str_contains($kepegawaianRaw, 'tidak')) {
+                $kepegawaian = 'tetap';
+            } elseif (str_contains($kepegawaianRaw, 'tidak') || str_contains($kepegawaianRaw, 'honorer')) {
+                $kepegawaian = 'tidak_tetap';
+            } elseif (str_contains($kepegawaianRaw, 'karyawan') || str_contains($kepegawaianRaw, 'magang')) {
+                $kepegawaian = 'karyawan';
+            }
+
             $status = strtolower(trim($row[13] ?? 'aktif'));
 
             $errors = [];
@@ -313,10 +322,6 @@ class GuruController extends Controller
                 } catch (\Exception $e) {
                     $errors[] = "Format tanggal masuk salah. Gunakan YYYY-MM-DD.";
                 }
-            }
-
-            if (!in_array($kepegawaian, array_keys(Guru::STATUS_KEPEGAWAIAN_LIST))) {
-                $kepegawaian = 'honorer';
             }
 
             if (!in_array($status, array_keys(Guru::STATUS_LIST))) {

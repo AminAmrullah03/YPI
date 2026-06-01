@@ -93,7 +93,7 @@
             <thead>
                 <tr style="background:#f8fafc;">
                     <th style="padding:10px 20px; text-align:left; font-size:11px; font-weight:600; color:#94a3b8; text-transform:uppercase; letter-spacing:0.5px; border-bottom:1px solid #f1f5f9;">Nama Siswa</th>
-                    <th style="padding:10px 16px; text-align:left; font-size:11px; font-weight:600; color:#94a3b8; text-transform:uppercase; letter-spacing:0.5px; border-bottom:1px solid #f1f5f9;">NIS / NIK</th>
+                    <th style="padding:10px 16px; text-align:left; font-size:11px; font-weight:600; color:#94a3b8; text-transform:uppercase; letter-spacing:0.5px; border-bottom:1px solid #f1f5f9;">NISN / NIK</th>
                     <th style="padding:10px 16px; text-align:left; font-size:11px; font-weight:600; color:#94a3b8; text-transform:uppercase; letter-spacing:0.5px; border-bottom:1px solid #f1f5f9;">Kelas</th>
                     <th style="padding:10px 16px; text-align:left; font-size:11px; font-weight:600; color:#94a3b8; text-transform:uppercase; letter-spacing:0.5px; border-bottom:1px solid #f1f5f9;">Program</th>
                     <th style="padding:10px 16px; text-align:left; font-size:11px; font-weight:600; color:#94a3b8; text-transform:uppercase; letter-spacing:0.5px; border-bottom:1px solid #f1f5f9; width:60px;">JK</th>
@@ -116,7 +116,7 @@
                             <div style="font-size:11px; color:#94a3b8;">Lahir: {{ $row['tempat_lahir'] ?? '—' }}, {{ $row['tanggal_lahir'] ?? '—' }}</div>
                         </td>
                         <td style="padding:12px 16px; font-size:12.5px; color:#475569;">
-                            <div>NIS: {{ $row['nis'] ?? '—' }}</div>
+                            <div>NISN: {{ $row['nis'] ?? '—' }}</div>
                             <div>NIK: {{ $row['nik'] ?? '—' }}</div>
                         </td>
                         <td style="padding:12px 16px; font-size:13px; color:#475569; font-weight:500;">

@@ -26,6 +26,13 @@ class Siswa extends Model
         'fulltime' => 'Fulltime',
     ];
 
+    const STATUS_SKTM_LIST = [
+        'none'     => 'Bukan Penerima',
+        'pending'  => 'Menunggu Verifikasi',
+        'approved' => 'Terverifikasi',
+        'rejected' => 'Ditolak',
+    ];
+
     const JENIS_KELAMIN = [
         'L' => 'Laki-laki',
         'P' => 'Perempuan',
@@ -48,6 +55,9 @@ class Siswa extends Model
         'kelas',
         'program',
         'status',
+        'status_sktm',
+        'dokumen_sktm',
+        'keterangan_sktm',
         'foto',
         'created_by',
     ];
@@ -87,6 +97,11 @@ class Siswa extends Model
     public function getProgramLabelAttribute(): string
     {
         return self::PROGRAM_LIST[$this->program] ?? $this->program;
+    }
+
+    public function getStatusSktmLabelAttribute(): string
+    {
+        return self::STATUS_SKTM_LIST[$this->status_sktm] ?? $this->status_sktm;
     }
 
     public function getFotoUrlAttribute(): string

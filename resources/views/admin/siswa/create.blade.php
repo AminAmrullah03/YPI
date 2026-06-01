@@ -39,8 +39,8 @@
 
                     {{-- NIS --}}
                     <div class="form-group">
-                        <label for="nis" class="form-label">Nomor Induk Siswa (NIS)</label>
-                        <input type="text" name="nis" id="nis" class="form-input @error('nis') is-invalid @enderror" placeholder="Masukkan NIS..." value="{{ old('nis') }}">
+                        <label for="nis" class="form-label">Nomor Induk Siswa Nasional (NISN)</label>
+                        <input type="text" name="nis" id="nis" class="form-input @error('nis') is-invalid @enderror" placeholder="Masukkan NISN..." value="{{ old('nis') }}">
                         @error('nis')
                             <span style="font-size:12px; color:#ef4444; margin-top:4px; display:block;">{{ $message }}</span>
                         @enderror

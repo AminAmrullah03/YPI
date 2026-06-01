@@ -38,6 +38,10 @@ class SiswaController extends Controller
             $query->where('program', $request->input('program'));
         }
 
+        if ($request->filled('status_sktm')) {
+            $query->where('status_sktm', $request->input('status_sktm'));
+        }
+
         $siswaList = $query->latest()->paginate(15)->withQueryString();
         $lembagaList = Lembaga::aktif()->get();
 

@@ -15,7 +15,7 @@ class SiswaTemplateExport extends DefaultValueBinder implements FromArray, WithH
     public function headings(): array
     {
         return [
-            'NIS',
+            'NISN',
             'NIK',
             'Nama Lengkap',
             'Jenis Kelamin (L/P)',
@@ -70,7 +70,7 @@ class SiswaTemplateExport extends DefaultValueBinder implements FromArray, WithH
     public function columnFormats(): array
     {
         return [
-            'A' => '@', // NIS
+            'A' => '@', // NISN
             'B' => '@', // NIK
             'I' => '@', // Telepon Wali
         ];
