@@ -38,17 +38,11 @@
                         @enderror
                     </div>
 
-                    {{-- Jenis Lembaga --}}
+                    {{-- ID Lembaga --}}
                     <div class="form-group">
-                        <label for="jenis" class="form-label">Jenis Lembaga <span style="color:#ef4444;">*</span></label>
-                        <select name="jenis" id="jenis" class="form-select @error('jenis') is-invalid @enderror" required>
-                            <option value="">-- Pilih Jenis --</option>
-                            @foreach(\App\Models\Lembaga::JENIS as $jenis)
-                                <option value="{{ $jenis }}" {{ old('jenis', $lembaga->jenis) == $jenis ? 'selected' : '' }}>
-                                    {{ \App\Models\Lembaga::JENIS_LABEL[$jenis] }}
-                                </option>
-                            @endforeach
-                        </select>
+                        <label for="jenis" class="form-label">ID Lembaga / Kode Unit <span style="color:#ef4444;">*</span></label>
+                        <input type="text" name="jenis" id="jenis" class="form-input @error('jenis') is-invalid @enderror" value="{{ old('jenis', $lembaga->jenis) }}" required style="text-transform: uppercase;">
+                        <small style="color:#94a3b8; font-size:11px; margin-top:4px; display:block;">Kode unik lembaga tanpa spasi (disarankan).</small>
                         @error('jenis')
                             <span style="font-size:12px; color:#ef4444; margin-top:4px; display:block;">{{ $message }}</span>
                         @enderror

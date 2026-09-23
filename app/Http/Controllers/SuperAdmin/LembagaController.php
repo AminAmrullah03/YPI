@@ -26,8 +26,10 @@ class LembagaController extends Controller
         }
 
         $lembagaList = $query->paginate(10)->withQueryString();
+        
+        $jenisList = Lembaga::select('jenis')->distinct()->pluck('jenis');
 
-        return view('super-admin.lembaga.index', compact('lembagaList'));
+        return view('super-admin.lembaga.index', compact('lembagaList', 'jenisList'));
     }
 
     public function create()
@@ -39,14 +41,15 @@ class LembagaController extends Controller
     {
         $validated = $request->validate([
             'nama' => 'required|string|max:255',
-            'jenis' => 'required|string|in:' . implode(',', Lembaga::JENIS),
+            'jenis' => 'required|string|max:50|unique:lembaga,jenis',
             'alamat' => 'nullable|string',
             'kepala' => 'required|string|max:255',
             'telepon' => 'nullable|string|max:20',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2048',
         ], [
             'nama.required' => 'Nama lembaga wajib diisi.',
-            'jenis.required' => 'Jenis lembaga wajib dipilih.',
+            'jenis.required' => 'ID Lembaga wajib diisi.',
+            'jenis.unique' => 'ID Lembaga sudah digunakan.',
             'kepala.required' => 'Nama kepala lembaga wajib diisi.',
             'logo.image' => 'Logo harus berupa gambar.',
             'logo.max' => 'Logo maksimal berukuran 2MB.',
@@ -93,14 +96,15 @@ class LembagaController extends Controller
 
         $validated = $request->validate([
             'nama' => 'required|string|max:255',
-            'jenis' => 'required|string|in:' . implode(',', Lembaga::JENIS),
+            'jenis' => 'required|string|max:50|unique:lembaga,jenis,' . $id,
             'alamat' => 'nullable|string',
             'kepala' => 'required|string|max:255',
             'telepon' => 'nullable|string|max:20',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2048',
         ], [
             'nama.required' => 'Nama lembaga wajib diisi.',
-            'jenis.required' => 'Jenis lembaga wajib dipilih.',
+            'jenis.required' => 'ID Lembaga wajib diisi.',
+            'jenis.unique' => 'ID Lembaga sudah digunakan.',
             'kepala.required' => 'Nama kepala lembaga wajib diisi.',
             'logo.image' => 'Logo harus berupa gambar.',
             'logo.max' => 'Logo maksimal berukuran 2MB.',

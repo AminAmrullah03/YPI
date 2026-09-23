@@ -15,11 +15,11 @@
                     <i class="ph ph-magnifying-glass" style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#94a3b8; font-size:16px;"></i>
                     <input type="text" name="search" class="form-input" placeholder="Cari nama lembaga atau kepala..." value="{{ request('search') }}" style="padding-left:38px;">
                 </div>
-                <select name="jenis" class="form-select" style="width:140px;">
-                    <option value="">Semua Jenis</option>
-                    @foreach(\App\Models\Lembaga::JENIS as $jenis)
+                <select name="jenis" class="form-select" style="width:160px;">
+                    <option value="">Semua ID Lembaga</option>
+                    @foreach($jenisList as $jenis)
                         <option value="{{ $jenis }}" {{ request('jenis') == $jenis ? 'selected' : '' }}>
-                            {{ \App\Models\Lembaga::JENIS_LABEL[$jenis] }}
+                            {{ strtoupper($jenis) }}
                         </option>
                     @endforeach
                 </select>
@@ -44,7 +44,7 @@
                 <tr>
                     <th style="padding:14px 20px; width:60px;">Logo</th>
                     <th style="padding:14px 16px;">Nama Lembaga</th>
-                    <th style="padding:14px 16px;">Jenis</th>
+                    <th style="padding:14px 16px;">ID Lembaga</th>
                     <th style="padding:14px 16px;">Kepala Lembaga</th>
                     <th style="padding:14px 16px;">Hubungi</th>
                     <th style="padding:14px 16px; text-align:center;">Status</th>

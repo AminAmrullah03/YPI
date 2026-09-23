@@ -6,18 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Lembaga extends Model
 {
-    // Jenis lembaga yang tersedia
-    const JENIS = ['TPQ', 'KB_TK', 'SD', 'SMP', 'SMA', 'MA'];
-
-    const JENIS_LABEL = [
-        'TPQ'   => 'TPQ',
-        'KB_TK' => 'KB/TK',
-        'SD'    => 'SD',
-        'SMP'   => 'SMP',
-        'SMA'   => 'SMA',
-        'MA'    => 'MA',
-    ];
-
     protected $table = 'lembaga';
 
     protected $fillable = [
@@ -39,6 +27,11 @@ class Lembaga extends Model
 
     // ─── Scopes ──────────────────────────────────────────────────────────────
 
+    public function setJenisAttribute($value)
+    {
+        $this->attributes['jenis'] = strtoupper($value);
+    }
+
     public function scopeAktif($query)
     {
         return $query->where('is_active', true);
@@ -48,7 +41,7 @@ class Lembaga extends Model
 
     public function getJenisLabelAttribute(): string
     {
-        return self::JENIS_LABEL[$this->jenis] ?? $this->jenis;
+        return strtoupper($this->jenis);
     }
 
     // ─── Relations ───────────────────────────────────────────────────────────
